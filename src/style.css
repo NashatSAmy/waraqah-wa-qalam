@@ -1,0 +1,841 @@
+/********************************/
+/**********Fonts Import**********/
+/********************************/
+
+@import url("https://fonts.googleapis.com/css2?family=Passions+Conflict&family=Quicksand&family=Reem+Kufi+Ink&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend&display=swap");
+
+/********************************/
+/********General Settings********/
+/********************************/
+
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #3e525c;
+}
+
+span,
+li {
+  cursor: alias;
+}
+
+body {
+  background-color: floralwhite;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 6fr;
+  grid-template-rows: 4% 90%;
+  gap: 2px;
+  padding: 5px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+header {
+  background-color: #3e525c;
+  grid-column: 1 / 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: azure;
+  font-size: 2rem;
+  font-family: "Passions Conflict", cursive;
+}
+
+header h1 {
+  cursor: default;
+}
+
+textarea:focus,
+input:focus,
+button:focus,
+select:focus,
+.newTask-note:focus,
+.newTask-checkItemLabel:focus {
+  outline: none;
+}
+
+/********************************/
+/**********Nav Settings**********/
+/********************************/
+
+nav {
+  position: relative;
+  grid-row: 2/4;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: floralwhite;
+  padding-top: 15px;
+  overflow: auto;
+  font-family: "Lexend", sans-serif;
+}
+
+.default-groups,
+.costume-projects {
+  font-size: 1rem;
+  line-height: 1.5;
+  width: 100%;
+}
+
+nav,
+.default-groups,
+.costume-projects {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+#projectDelete {
+  position: absolute;
+  bottom: 1%;
+  right: 5%;
+}
+
+#projectDelete::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f1f8";
+  cursor: pointer;
+  color: red;
+  font-size: 1.2rem;
+}
+
+.nav-item {
+  border-bottom: 2px solid #3e525c;
+  width: 80%;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 200ms;
+}
+
+.nav-item:hover {
+  color: #1a91cc;
+  font-size: 1.1rem;
+}
+
+#project-h1 {
+  text-align: center;
+  width: 80%;
+  color: aliceblue;
+  background-color: #3e525c;
+  font-size: 1.4rem;
+  font-family: monospace;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  margin: 15px 0;
+  cursor: pointer;
+}
+
+#project-h1::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\2b";
+  color: azure;
+  margin-left: 10%;
+  font-size: 1.4rem;
+  transition: all 200ms;
+  transform-origin: center;
+  display: inline-block;
+}
+
+#project-h1:hover::after {
+  transform: rotate(-75deg);
+}
+
+.removeProject:hover {
+  color: #3e525c;
+}
+
+.nav-selected {
+  font-size: 1.1rem;
+}
+
+.nav-selected::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f105";
+  color: #1a91cc;
+  margin-right: 3px;
+  font-size: 1rem;
+}
+
+.removeProject::after,
+.removeProject::before {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+.removeProject::after {
+  font-family: "Font Awesome 6 Free";
+  content: "\f00d";
+  font-weight: 900;
+  font-size: 1rem;
+  left: 0;
+  right: 0;
+  text-align: end;
+  margin: auto;
+  width: 80%;
+  padding-right: 3%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: end;
+  text-shadow: rgb(255 250 240) 1px 0px 0px,
+    rgb(255 250 240) 0.540302px 0.841471px 0px,
+    rgb(255 250 240) -0.416147px 0.909297px 0px,
+    rgb(255 250 240) -0.989992px 0.14112px 0px,
+    rgb(255 250 240) -0.653644px -0.756802px 0px,
+    rgb(255 250 240) 0.283662px -0.958924px 0px,
+    rgb(255 250 240) 0.96017px -0.279415px 0px;
+  color: red;
+}
+
+.removeProject::before {
+  content: "Remove";
+  font-size: 1.1rem;
+  background-color: red;
+  color: transparent;
+  width: 0%;
+  left: 10%;
+  transition: all 1000ms;
+}
+
+.removeProject:hover:before {
+  width: 80%;
+  color: floralwhite;
+  padding-left: 7%;
+}
+
+.errorAlert {
+  color: red;
+  animation: shake 300ms;
+}
+
+@keyframes shake {
+  25% {
+    transform: translateX(4px);
+  }
+  50% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+/********************************/
+/**********Main Settings*********/
+/********************************/
+
+main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 3vh;
+  border-left: #e2ecec 2px solid;
+}
+
+#add-task {
+  position: absolute;
+  bottom: 8%;
+  right: 10%;
+  background-color: aliceblue;
+  width: 5vh;
+  height: 5vh;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+  cursor: pointer;
+}
+
+#add-task::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\2b";
+  color: #0074ff;
+  font-size: 2.3vw;
+  display: inline-block;
+  transition: all 200ms;
+  transform-origin: center;
+}
+
+#add-task:hover::after {
+  transform: rotate(-75deg);
+}
+
+.task-list {
+  width: 40vw;
+  height: 85vh;
+  overflow: auto;
+  padding-right: 5%;
+}
+
+.task {
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
+  row-gap: 10px;
+  align-items: center;
+  padding-bottom: 15px;
+  border-bottom: #3e525c solid 2px;
+  margin-bottom: 35px;
+}
+
+.task::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f55a";
+  position: absolute;
+  top: 0;
+  right: 3px;
+  cursor: pointer;
+  color: #ff4a4a;
+}
+
+.task-group {
+  grid-column: 1 / 4;
+}
+
+.task-name {
+  grid-column: 1 / 4;
+  font-size: 1.1rem;
+  font-family: "Lexend", sans-serif;
+}
+
+.task-brief {
+  grid-column: 1 / 5;
+  overflow: hidden;
+  height: 2rem;
+  font-size: 1rem;
+}
+
+#task-completion-status {
+  grid-column: 4 / 5;
+  justify-self: end;
+  height: 100%;
+  appearance: none;
+  border: 1px solid #3e525c;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#task-completion-status:checked {
+  background-color: #3e525c;
+  border: azure;
+}
+
+#task-completion-status::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 1.2rem;
+  content: "\f00c";
+  position: absolute;
+  color: aliceblue;
+  display: none;
+}
+
+#task-completion-status:checked:after {
+  display: block;
+}
+
+.task-dueDate {
+  grid-column: 1/2;
+}
+
+.task-time {
+  grid-column: 2 / 3;
+}
+
+.task-ect {
+  grid-column: 3 / 4;
+}
+
+.task-dueDate,
+.task-ect,
+.task-time,
+.task-group {
+  letter-spacing: 2px;
+  color: #6a6a6a;
+  font-size: small;
+  letter-spacing: 2px;
+  font-family: "Lexend", sans-serif;
+}
+
+.task-toolBox {
+  grid-column: 4 / 5;
+  grid-row: 4 / 5;
+  display: grid;
+  width: 60%;
+  justify-self: end;
+}
+
+.stopWatch-button {
+  grid-column: 1 / 2;
+}
+
+.pomo-button {
+  grid-column: 2 / 3;
+}
+
+.stopWatch-button,
+.pomo-button {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  justify-self: center;
+}
+
+.stopWatch-button::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 1rem;
+  content: "\f2f2";
+  cursor: pointer;
+  color: #009688;
+}
+
+.pomo-button::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 1rem;
+  content: "\f818";
+  cursor: pointer;
+  color: #fa7837;
+}
+
+/********************************/
+/**********Form Settings*********/
+/********************************/
+
+#newProject {
+  width: 85%;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  box-shadow: 0px 0px 10px 3px rgb(62 82 92 / 75%);
+  top: 2%;
+  left: -100%;
+  transition: all 350ms;
+}
+
+.appear {
+  /*to appear on user screen*/
+  left: 8% !important;
+}
+
+#newProject-name {
+  width: 100%;
+  font-size: 0.9rem;
+  padding: 5px;
+  border: none;
+  padding-right: 25%;
+  color: inherit;
+}
+
+#add-newProject {
+  position: absolute;
+  right: 2%;
+  background-color: transparent;
+  color: rgb(26 145 204);
+  border: none;
+  font-size: 1rem;
+}
+
+#add-newProject:hover {
+  cursor: pointer;
+  text-shadow: rgb(26 145 204) 1px 0px 0px,
+    rgb(26 145 204) 0.540302px 0.841471px 0px,
+    rgb(26 145 204) -0.416147px 0.909297px 0px,
+    rgb(26 145 204) -0.989992px 0.14112px 0px,
+    rgb(26 145 204) -0.653644px -0.756802px 0px,
+    rgb(26 145 204) 0.283662px -0.958924px 0px,
+    rgb(26 145 204) 0.96017px -0.279415px 0px;
+  color: floralwhite;
+}
+
+/********************************/
+/*******New Task Settings********/
+/********************************/
+
+.blackMask {
+  background-color: rgba(0, 0, 0, 10%);
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.newTask {
+  width: 40%;
+  height: 85%;
+  background-color: white;
+  box-sizing: border-box;
+  padding: 15px;
+  font-family: "Lexend", sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.newTask-startingDateTime {
+  color: #6a6a6a66;
+  font-size: small;
+  margin: auto;
+}
+
+.newTask-nameLabel,
+.newTask-descriptionLabel,
+.newTask-notesLabel {
+  font-size: large;
+  color: #6a6a6a;
+}
+
+.newTask-name {
+  border: none;
+  background-color: black;
+  color: azure;
+  width: 100%;
+  padding: 5px;
+  font-size: medium;
+  font-family: "Lexend", sans-serif;
+  box-sizing: border-box;
+}
+
+.newTask-infoBox1,
+.newTask-infoBox2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.newTask-infoBox1 {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.newTask-dueDateLabel,
+.newTask-priorityLabel,
+.newTask-groupLabel {
+  color: #6a6a6a;
+  border-left: black solid 3px;
+  padding-left: 3px;
+}
+
+.newTask-dueDate {
+  border: none;
+  font-family: "Lexend", sans-serif;
+}
+
+.newTask-priority,
+.newTask-group {
+  border: none;
+  font-family: "Lexend", sans-serif;
+  padding: 0 5px 0 0;
+}
+
+.newTask-description {
+  width: 100%;
+  height: 15%;
+  border: none;
+  background-color: black;
+  color: azure;
+  box-sizing: border-box;
+  font-family: "Lexend", sans-serif;
+  padding: 10px;
+  resize: none;
+  overflow: auto;
+}
+
+.newTask-noteContainer {
+  width: 100%;
+  position: relative;
+}
+
+.newTask-notes {
+  width: 100%;
+  height: 25%;
+  border: none;
+  background-color: black;
+  color: azure;
+  box-sizing: border-box;
+  font-family: "Lexend", sans-serif;
+  padding: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
+.subItemsAdder{
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  height: 10%;
+  position: sticky;
+  top: 0;
+}
+
+#addSubNotes {
+  width: 5%;
+  height: 100%;
+}
+
+#addSubTasks {
+  width: 5%;
+  height: 100%;
+}
+
+#addSubNotes::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f481";
+  position: absolute;
+  top: 0;
+  right: 5px;
+  cursor: pointer;
+}
+
+#addSubNotes:hover {
+  color: #1a91cc;
+}
+
+#addSubNotes:active {
+  color: #3e525c;
+}
+
+#addSubTasks::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f772";
+  position: absolute;
+  top: 0;
+  right: 35px;
+  cursor: pointer;
+}
+
+#addSubTasks:hover {
+  color: #1a91cc;
+}
+
+#addSubTasks:active {
+  color: #3e525c;
+}
+
+.newTask-note {
+  -webkit-user-modify: read-write;
+  font-size: smaller;
+  text-align: justify;
+  line-height: 1.3;
+  position: relative;
+  padding-left: 5px;
+  word-break: break-word;
+}
+
+.removeSubItem {
+  position: absolute;
+  height: 100%;
+  width: 10px;
+  left: -5px;
+  z-index: 3;
+}
+
+.removeSubItem:hover {
+  cursor: pointer;
+}
+
+.newTask-note::before,
+.newTask-checkItem::before {
+  content: "~";
+  position: absolute;
+  left: 0;
+  color: #00ff00;
+  margin-left: -5px;
+}
+
+.newTask-note:focus::before,
+.newTask-checkItem:focus-within:before {
+  content: "x";
+  position: absolute;
+  color: #00ff00;
+  cursor: pointer;
+}
+
+.newTask-note:empty:not(:focus)::after {
+  content: "Enter your note...";
+  color: #757575;
+}
+
+.newTask-checkItem {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  align-items: center;
+  font-size: small;
+}
+
+.newTask-checkItemLabel {
+  margin-left: 5px;
+  display: inline-block;
+  line-height: 1.3;
+  background-color: transparent;
+  border: none;
+  color: azure;
+  width: 100%;
+  font-size: 14px;
+}
+
+.newTask-infoBox2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.newTask-etc,
+.newTask-addToHome {
+  color: #6a6a6a66;
+  font-size: small;
+}
+
+.newTask-addToHome {
+  display: flex;
+  align-items: center;
+}
+
+.newTask-addButton {
+  font-family: inherit;
+  font-size: medium;
+  color: azure;
+  background-color: black;
+  letter-spacing: 3px;
+  width: 60%;
+  margin: auto;
+  border: black 2px solid;
+}
+
+.newTask-addButton:hover {
+  color: black;
+  background-color: #4caf50;
+  cursor: pointer;
+}
+
+.newTask-addButton:active {
+  background-color: #37813a;
+}
+
+/********************************/
+/*******View Task Settings*******/
+/********************************/
+
+.taskView {
+  height: 90%;
+  width: 37%;
+  padding: 10px;
+  row-gap: 15px;
+  background-color: white;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr;
+  grid-auto-rows: min-content;
+  box-sizing: border-box;
+  color: #3e525c;
+}
+
+.taskView-startDate {
+  grid-column: 1 / 2;
+  color: #6a6a6a66;
+  font-size: small;
+}
+
+.taskView-completed {
+  grid-column: 2 / 4;
+}
+
+.taskView-group {
+  grid-column: 4 / 5;
+  justify-self: end;
+  color: #6a6a6a66;
+  font-size: small;
+}
+
+.taskView-name {
+  grid-column: 1 / 5;
+  font-size: larger;
+  color: black;
+}
+
+.taskView-dueDate {
+  grid-column: 1 / 3;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.taskView-priority {
+  grid-column: 3 / 5;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.taskView-etc {
+  grid-column: 1 / 3;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.taskView-totalTime {
+  grid-column: 3 / 5;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.taskView-description {
+  grid-column: 1 / 5;
+  color: black;
+  font-size: large;
+  line-height: 1.2;
+  text-align: justify;
+}
+
+.taskView-description span {
+  font-size: initial;
+}
+
+.taskView-notes {
+  grid-column: 1 / 5;
+  font-size: large;
+  color: black;
+  overflow: auto;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.taskView-notes span {
+  font-size: initial;
+}
+
+.taskView-notes label {
+  display: block;
+  display: flex;
+  justify-content: space-between;
+}
+
+.taskView-notes label span {
+  border-bottom: black solid 2px;
+}
