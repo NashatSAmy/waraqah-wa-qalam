@@ -284,7 +284,7 @@ main {
 .task {
   display: grid;
   position: relative;
-  grid-template-columns: 1fr 2fr 1fr 1fr;
+  grid-template-columns: 2fr 2fr 2fr 1fr;
   row-gap: 10px;
   align-items: center;
   padding-bottom: 15px;
@@ -316,7 +316,7 @@ main {
 .task-brief {
   grid-column: 1 / 5;
   overflow: hidden;
-  height: 2rem;
+  max-height: 2rem;
   font-size: 1rem;
 }
 
@@ -407,7 +407,7 @@ main {
   font-size: 1rem;
   content: "\f2f2";
   cursor: pointer;
-  color: #009688;
+  color: #03A9F4;
 }
 
 .pomo-button::after {

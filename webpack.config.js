@@ -6,8 +6,9 @@ module.exports = {
   entry: {
     styles: ["./src/css-reset.css", "./src/style.css",],
     mainPage: ["./src/index.js"],
-    navBar: ["./src/navModule.js", "./src/communicationTower.js"],
-    taskList: ["./src/taskListModule.js"],
+    navBar: ["./src/navModule.js"],
+    newTaskCreation: ["./src/newTaskFormModule.js"],
+    tasksList: ["./src/taskListModule.js"]
   },
   devtool: "source-map",
   devServer: {

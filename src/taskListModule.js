@@ -1,131 +1,198 @@
-const formController = {
-  todaysDate: `${new Date().toDateString()} ${new Date().toLocaleTimeString()}`,
-  subTasks: [],
-  notes: [],
-  removableSubItem: "",
-  removableSubItemTest: false,
+const newTaskInfo = {
+  newTaskName: "",
+  newTaskDescription: "",
+  newTaskStartingDate: "",
+  newTaskDueDate: "",
+  newTaskETC: "",
+  newTaskGroup: "",
+  newTaskPriority: "",
+  newTaskHomeItem: false,
+  newTaskSubItems: [],
+  greenLight: false,
 
-  currentProjects() {
-    const projectsList = document.querySelectorAll(".project");
-    const projectNames = [];
-    projectsList.forEach((project) => projectNames.push(project.innerText));
-    return projectNames.map((name) => `<option>${name}</option>`);
+  getName() {
+    const nameFiled = document.getElementsByClassName("newTask-name");
+    const name = nameFiled[0].value;
+    this.newTaskName = name;
   },
-  addNewSubItem(e) {
-    const notes = document.getElementById("newTask-subItems");
-    if (e.target.id == "addSubTasks") {
-      const newTask = document.createElement("div");
-      newTask.classList.add("newTask-checkItem");
-      newTask.setAttribute("data-elementType", "newTask-subItem")
-      newTask.innerHTML = `<div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
-      <input type="text" class="newTask-checkItemLabel" placeholder="Enter your item..." data-elementType="newTask-task">
-      <input type="checkbox" data-elementType="newTask-taskStatus">`;
-      notes.appendChild(newTask);
-    } else if (e.target.id == "addSubNotes") {
-      const newNote = document.createElement("div");
-      newNote.classList.add("newTask-noteContainer");
-      newNote.setAttribute("data-elementType", "newTask-subItem")
-      newNote.innerHTML = `<div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
-      <p class="newTask-note" data-elementType="newTask-note"></p> `
-      notes.appendChild(newNote);
+  getDescription() {
+    const descriptionFiled = document.getElementsByClassName(
+      "newTask-description"
+    );
+    const description = descriptionFiled[0].value;
+    this.newTaskDescription = description;
+  },
+  getStartingDate() {
+    const startingDateTimeFiled = document.getElementsByClassName(
+      "newTask-startingDateTime"
+    );
+    const startingDateTime = startingDateTimeFiled[0].innerText;
+    this.newTaskStartingDate = startingDateTime;
+  },
+  getDueDate() {
+    const dueDateFiled = document.getElementsByClassName("newTask-dueDate");
+    const dueDate = dueDateFiled[0].value;
+    this.newTaskDueDate = `Due: ${dueDate.split("T")[0]}`;
+  },
+  getETC() {
+    const etcFiled = document.getElementById("newTask-etcContainer");
+    let etc = etcFiled.innerText;
+    etc = etc.match(/\d+/g);
+    etc = (+etc[0] * 24) + +etc[1] + (+etc[2] / 60)
+    this.newTaskETC = `ETC: ${Math.round(etc)} Hours`;
+  },
+  getGroup() {
+    const groupsFiled = document.getElementsByClassName("newTask-group");
+    const group = groupsFiled[0].value;
+    this.newTaskGroup = group;
+  },
+  isHomeItem() {
+    const homeFiled = document.getElementsByName("newTask-addToHome");
+    const home = homeFiled[0].checked;
+    this.newTaskHomeItem = home;
+  },
+  getSubItems() {
+    const notesList = document.querySelectorAll(
+      '[data-elementtype="newTask-note"]'
+    );
+    const subTasksList = document.querySelectorAll(
+      '[data-elementtype="newTask-task"]'
+    );
+    notesList.forEach((note) =>
+      this.newTaskSubItems.push({ type: "note", value: note.innerText })
+    );
+    subTasksList.forEach((task) =>
+      this.newTaskSubItems.push({ type: "task", value: task.value })
+    );
+  },
+  getPriority() {
+    const priorityFiled = document.getElementsByClassName("newTask-priority");
+    const priority = priorityFiled[0].value;
+    this.newTaskPriority = priority;
+  },
+  getAllInfo(e) {
+    if (!e.target.classList.contains("newTask-addButton")) return;
+    newTaskInfo.getName();
+    newTaskInfo.getPriority();
+    newTaskInfo.getDescription();
+    newTaskInfo.getDueDate();
+    newTaskInfo.getGroup();
+    newTaskInfo.getETC();
+    newTaskInfo.getStartingDate();
+    newTaskInfo.getSubItems();
+    newTaskInfo.isHomeItem();
+    if (newTaskInfo.newTaskName !== "" && newTaskInfo.newTaskDueDate !== "") {
+      newTaskInfo.greenLight = true;
+      e.preventDefault();
+      document.body.removeChild(document.querySelector(".blackMask"));
     }
-    return;
   },
-  removeSubItem(e) {
-    if (e.target.dataset.elementtype == "newTask-removeSubItem" && this.removableSubItemTest == true) {
-      this.removableSubItem.remove();
-      this.removableSubItemTest = false;
-    } else if (
-      document.activeElement.parentNode.dataset.elementtype == "newTask-subItem"
-    ) {
-      this.removableSubItem = document.activeElement.parentNode;
-      this.removableSubItemTest = true;
-    } else {
-      this.removableSubItemTest = false;
-    }
-  },
-  calculateETC() {
-    const dueDate = new Date(document.getElementsByName("newTask-dueDate")[0].value).getTime()
-    const startingDate = new Date().getTime();
-    const days = (dueDate - startingDate) / 8.64e+7;
-    const hours = (days - Math.floor(days)) * 24;
-    const minuets = (hours - Math.floor(hours)) * 60;
-    const etc = `ETC: Days ${Math.floor(days)} Hours ${Math.floor(hours)} Minutes ${Math.floor(minuets)}`;
-    const etcContainer = document.getElementById("newTask-etcContainer");
-    etcContainer.innerText = etc;
-  }
 };
 
-function addNewTaskFormAppear(e) {
-  if (e.target.id == "add-task") {
-    let mask = document.createElement("div");
-    mask.classList.add("blackMask");
-    mask.innerHTML = `
-          <form action="#" class="newTask">
-        <span class="newTask-startingDateTime">${
-          formController.todaysDate
-        }</span>
-        <label for="newTask-name" class="newTask-nameLabel">Task Name</label>
-        <input type="text" name="newTask-name" class="newTask-name" required>
-        <div class="newTask-infoBox1">
-          <label for="newTask-dueDate" class="newTask-dueDateLabel"> Due Date: <input type="datetime-local"
-              name="newTask-dueDate" class="newTask-dueDate" required></label>
-          <label for="newTask-priority" class="newTask-priorityLabel">Priority: <select name="newTask-priority"
-              class="newTask-priority">
-              <option value="Urgent">Urgent</option>
-              <option value="Important">Important</option>
-              <option value="Not Important">Not Important</option>
-            </select></label>
-            <label for="newTask-group" class="newTask-groupLabel">
-              Group: <select class="newTask-group">
-               ${formController.currentProjects()}
-              </select>
-            </label>
-        </div>
-        <label for="newTask-description" class="newTask-descriptionLabel">Task description</label>
-        <textarea name="newTask-description" class="newTask-description"></textarea>
-        <label for="newTask-notes" class="newTask-notesLabel">Notes</label>
-        <div class="newTask-notes" id="newTask-subItems">
-        <div class="subItemsAdder">
-          <div id="addSubTasks"></div>
-          <div id="addSubNotes"></div>
-        </div>
-          <div class="newTask-noteContainer" data-elementType="newTask-subItem">
-            <div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
-            <p class="newTask-note" data-elementType="newTask-note"></p> 
-          </div>
-          <div class="newTask-checkItem" data-elementType="newTask-subItem">
-            <div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
-            <input type="text" class="newTask-checkItemLabel" placeholder="Enter your item..." data-elementType="newTask-task">
-            <input type="checkbox" data-elementType="newTask-taskStatus">
-          </div>
-        </div>
-        <div class="newTask-infoBox2">
-          <span id="newTask-etcContainer" class="newTask-etc">
-            ETC: Days 0 Hours 0 Minuets 0
-          </span>
-          <label class="newTask-addToHome">Add to HomePage<input type="checkbox"></label>
-        </div>
-        <button class="newTask-addButton">Add Task</button>
-      </form>
-          `;
+const listItemMaker = (listItemId) => {
+  let idNo = listItemId;
+  let name = "";
+  let description = "";
+  const startingDate = "";
+  let dueDate = "";
+  let status = false;
+  let ETC = "";
+  let group = "";
+  let homeItem = false;
+  let subItems = [];
+  let priority = "";
+  let workTime = "Worked: 0 Hours";
+  let stopWatchTime = 0; // In seconds
+  let pomodoroCount = 0;
+  let pomodoroLimit = 25;
+  let pomoBreakLimit = 5;
+  let pomodoroTime = 0;
+  let pomoBreakTime = 0;
 
-    document.body.appendChild(mask);
-    document.getElementsByName("newTask-dueDate")[0].addEventListener("change", formController.calculateETC)
+  return {
+    idNo,
+    name,
+    description,
+    startingDate,
+    dueDate,
+    status,
+    ETC,
+    homeItem,
+    subItems,
+    pomodoroCount,
+    stopWatchTime,
+    group,
+    pomodoroLimit,
+    pomoBreakLimit,
+    pomodoroTime,
+    pomoBreakTime,
+    priority,
+    workTime,
+  };
+};
+
+const listItemController = {
+  itemsList: [],
+
+  makeListItem() {
+    const newListItem = listItemMaker(
+      `${newTaskInfo.newTaskName.slice(0, 3).toLocaleLowerCase()}${Math.floor(
+        Math.random() * 1000000
+      )}`
+    );
+
+    newListItem.name = newTaskInfo.newTaskName;
+    newListItem.description = newTaskInfo.newTaskDescription;
+    newListItem.startingDate = newTaskInfo.newTaskStartingDate;
+    newListItem.dueDate = newTaskInfo.newTaskDueDate;
+    newListItem.status = false;
+    newListItem.ETC = newTaskInfo.newTaskETC;
+    newListItem.group = newTaskInfo.newTaskGroup;
+    newListItem.homeItem = newTaskInfo.newTaskHomeItem;
+    newListItem.subItems = newTaskInfo.newTaskSubItems;
+    newListItem.priority = newTaskInfo.newTaskPriority;
+
+    return newListItem;
+  },
+  populateList() {
+    listItemController.itemsList.push(listItemController.makeListItem());
+  },
+  populateDomList() {
+    const domTasksList = document.getElementsByClassName("task-list")[0];
+    listItemController.itemsList.slice(domTasksList.children.length).forEach((item) => {
+      const listItem = document.createElement("li");
+      listItem.classList.add("task");
+      listItem.setAttribute("data-taskId", item.idNo)
+      listItem.innerHTML = `
+      <span class="task-group">
+        ${item.group}
+      </span>
+      <span class="task-name">${item.name}</span>
+      <input type="checkbox" name="task-completion-status" id="task-completion-status" />
+      <span class="task-brief">${item.description}</span>
+      <div class="task-toolBox">
+        <div class="stopWatch-button"></div>
+        <div class="pomo-button"></div>
+      </div>
+      <span class="task-dueDate">${item.dueDate}</span>
+      <span class="task-time">${item.workTime}</span>
+      <span class="task-ect">${item.ETC}</span>
+      `;
+      domTasksList.appendChild(listItem);
+    });
+  },
+  updateListItem() {},
+  removeItem(e) {
+    
+  },
+};
+
+window.addEventListener("click", newTaskInfo.getAllInfo);
+window.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("newTask-addButton")) return;
+  else if (newTaskInfo.greenLight == true) {
+    listItemController.populateList();
+    listItemController.populateDomList();
+    newTaskInfo.greenLight = false;
   }
-}
-
-function resetMain(e) {
-  if (e.target.classList.contains("blackMask")) {
-    document.body.removeChild(document.querySelector(".blackMask"));
-  }
-}
-
-// Animation event listeners
-window.addEventListener("click", addNewTaskFormAppear);
-window.addEventListener("click", resetMain);
-window.addEventListener("submit", resetMain);
-
-// Functions event listeners
-window.addEventListener("click", formController.addNewSubItem);
-window.addEventListener("click", formController.removeSubItem);
+});
