@@ -104,7 +104,7 @@ function addNewTaskFormAppear(e) {
           <span id="newTask-etcContainer" class="newTask-etc">
             ETC: Days 0 Hours 0 Minuets 0
           </span>
-          <label class="newTask-addToHome">Add to HomePage<input type="checkbox" name="newTask-addToHome"></label>
+          <label class="newTask-addToHome">Add to HomePage<input type="checkbox" name="newTask-addToHome" checked></label>
         </div>
         <button class="newTask-addButton">Add Task</button>
       </form>

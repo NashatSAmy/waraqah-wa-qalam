@@ -4,10 +4,49 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./navModule.js" defer></script>
-    
+    <link rel="stylesheet" href="css-reset.css">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
   </head>
 
-  <body></body>
+  <body>
+    <header>
+      <h1>Waraqah wa Qalam</h1>
+    </header>
+    <nav>
+      <ul class="default-groups">
+        <li class="nav-item nav-selected">Home</li>
+        <li class="nav-item">Today</li>
+        <li class="nav-item">Tomorrow</li>
+      </ul>
+      <h1 class="project-h1">Projects</h1>
+      <ul class="costume-groups">
+        <form action="#" class="newProject">
+          <input type="text" name="addProject" id="newProject-name" placeholder="ex.School">
+          <button type="button" class="add-newProject">ADD</button>
+        </form>
+        <li class="nav-item">Web Stuff</li>
+      </ul>
+    </nav>
+    <main>
+      <div class="add-task"></div>
+      <ul class="task-list">
+        <li class="task">
+          <span class="task-group">
+            Web Stuff
+          </span>
+          <span class="task-name">Complete The Web-Site</span>
+          <input type="checkbox" name="task-completion-status" id="task-completion-status" />
+          <span class="task-brief">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt excepturi fugiat quam illum quas, eligendi quod maxime repudiandae dolorum? Perspiciatis adipisci ducimus neque eius tempore voluptates molestiae dolor deserunt inventore?</span>
+          <div class="task-toolBox">
+            <div class="stopWtatch-button"></div>
+            <div class="pomo-button"></div>
+          </div>
+          <span class="task-dueDate">10/12/2022</span>
+          <span class="task-time">Days: 0 Hours: 0 Minuets: 0</span>
+          <span class="task-ect">ECT: 10 Hours</span>
+        </li>
+      </ul>
+    </main>
+  </body>
 </html>

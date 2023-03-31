@@ -19,7 +19,7 @@
 
 span,
 li {
-  cursor: alias;
+  cursor: default;
 }
 
 body {
@@ -292,15 +292,18 @@ main {
   margin-bottom: 35px;
 }
 
-.task::after {
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  content: "\f55a";
+.taskRemovalContainer {
   position: absolute;
   top: 0;
   right: 3px;
   cursor: pointer;
   color: #ff4a4a;
+}
+
+.taskRemovalContainer::after {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  content: "\f55a";
 }
 
 .task-group {

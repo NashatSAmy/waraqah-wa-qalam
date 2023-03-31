@@ -1,3 +1,11 @@
+(self["webpackChunkwaraqah_wa_qalam"] = self["webpackChunkwaraqah_wa_qalam"] || []).push([["tasksList"],{
+
+/***/ "./src/taskListModule.js":
+/*!*******************************!*\
+  !*** ./src/taskListModule.js ***!
+  \*******************************/
+/***/ (() => {
+
 // Information holder object that collects all information needed for new task
 const newTaskInfo = {
   newTaskName: "",
@@ -261,3 +269,14 @@ window.addEventListener("click", (e) => {
   }
 });
 window.addEventListener("click", listItemController.shiftDomList);
+
+
+/***/ })
+
+},
+/******/ __webpack_require__ => { // webpackRuntimeModules
+/******/ var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
+/******/ var __webpack_exports__ = (__webpack_exec__("./src/taskListModule.js"));
+/******/ }
+]);
+//# sourceMappingURL=tasksList.bundle.js.map
