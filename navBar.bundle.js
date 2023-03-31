@@ -1,42 +1,5 @@
 (self["webpackChunkwaraqah_wa_qalam"] = self["webpackChunkwaraqah_wa_qalam"] || []).push([["navBar"],{
 
-/***/ "./src/communicationTower.js":
-/*!***********************************!*\
-  !*** ./src/communicationTower.js ***!
-  \***********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "listen": () => (/* binding */ listen),
-/* harmony export */   "stream": () => (/* binding */ stream)
-/* harmony export */ });
-/*Communication tower is the file responsible for the communication between modules 
-to avoid coupling issues between modules as the modules can stream information
-through dedicated channels and modules that are interested in these information 
-can listen to the channel that contains the information they need*/
-
-// Channels
-
-const channels = {
-  c1: "",
-  c2: "",
-  c3: "",
-  c4: "",
-  c5: "",
-};
-
-function stream(channel, message) {
-  channels[channel] = message;
-}
-function listen(channel) {
-  return channels[channel];
-}
-
-
-/***/ }),
-
 /***/ "./src/navModule.js":
 /*!**************************!*\
   !*** ./src/navModule.js ***!
@@ -190,7 +153,7 @@ navCoordinator.navUpdate()
 },
 /******/ __webpack_require__ => { // webpackRuntimeModules
 /******/ var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-/******/ var __webpack_exports__ = (__webpack_exec__("./src/navModule.js"), __webpack_exec__("./src/communicationTower.js"));
+/******/ var __webpack_exports__ = (__webpack_exec__("./src/navModule.js"));
 /******/ }
 ]);
 //# sourceMappingURL=navBar.bundle.js.map

@@ -1,9 +1,9 @@
-(self["webpackChunkwaraqah_wa_qalam"] = self["webpackChunkwaraqah_wa_qalam"] || []).push([["taskList"],{
+(self["webpackChunkwaraqah_wa_qalam"] = self["webpackChunkwaraqah_wa_qalam"] || []).push([["newTaskCreation"],{
 
-/***/ "./src/taskListModule.js":
-/*!*******************************!*\
-  !*** ./src/taskListModule.js ***!
-  \*******************************/
+/***/ "./src/newTaskFormModule.js":
+/*!**********************************!*\
+  !*** ./src/newTaskFormModule.js ***!
+  \**********************************/
 /***/ (() => {
 
 const formController = {
@@ -74,7 +74,7 @@ function addNewTaskFormAppear(e) {
           formController.todaysDate
         }</span>
         <label for="newTask-name" class="newTask-nameLabel">Task Name</label>
-        <input type="text" name="newTask-name" class="newTask-name" required>
+        <input type="text" name="newTask-name" class="newTask-name" autocomplete="off" required>
         <div class="newTask-infoBox1">
           <label for="newTask-dueDate" class="newTask-dueDateLabel"> Due Date: <input type="datetime-local"
               name="newTask-dueDate" class="newTask-dueDate" required></label>
@@ -112,7 +112,7 @@ function addNewTaskFormAppear(e) {
           <span id="newTask-etcContainer" class="newTask-etc">
             ETC: Days 0 Hours 0 Minuets 0
           </span>
-          <label class="newTask-addToHome">Add to HomePage<input type="checkbox"></label>
+          <label class="newTask-addToHome">Add to HomePage<input type="checkbox" name="newTask-addToHome" checked></label>
         </div>
         <button class="newTask-addButton">Add Task</button>
       </form>
@@ -143,7 +143,7 @@ window.addEventListener("click", formController.removeSubItem);
 },
 /******/ __webpack_require__ => { // webpackRuntimeModules
 /******/ var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-/******/ var __webpack_exports__ = (__webpack_exec__("./src/taskListModule.js"));
+/******/ var __webpack_exports__ = (__webpack_exec__("./src/newTaskFormModule.js"));
 /******/ }
 ]);
-//# sourceMappingURL=taskList.bundle.js.map
+//# sourceMappingURL=newTaskCreation.bundle.js.map
