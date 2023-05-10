@@ -71,7 +71,6 @@ const navController = {
     const validationTest = /\w/;
     if (validationTest.test(newProjectName.value) == true) {
       navInfoEditing.addNewProjectName(navInfo.projectsNames, newProjectName);
-
       newProjectName.value = "";
       navCoordinator.navUpdate();
       resetAllNav();

@@ -1,44 +1,80 @@
+// Controller object that controls how the form works.
 const formController = {
-  todaysDate: `${new Date().toDateString()} ${new Date().toLocaleTimeString()}`,
+  todaysDate: `${new Date().toDateString()} ${new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`,
   subTasks: [],
   notes: [],
   removableSubItem: "",
   removableSubItemTest: false,
 
   currentProjects() {
+    // Function that grabs all of the projects in the custom project list inside the navbar
     const projectsList = document.querySelectorAll(".project");
     const projectNames = [];
     projectsList.forEach((project) => projectNames.push(project.innerText));
     return projectNames.map((name) => `<option>${name}</option>`);
   },
-  addNewSubItem(e) {
+  showNoteInput(e) {
+    // Function that allow the user to input new sub-item task or note
+    const notesAdder = document.getElementById("subItemsAdder");
     const notes = document.getElementById("newTask-subItems");
     if (e.target.id == "addSubTasks") {
-      const newTask = document.createElement("div");
-      newTask.classList.add("newTask-checkItem");
-      newTask.setAttribute("data-elementType", "newTask-subItem")
-      newTask.innerHTML = `<div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
-      <input type="text" class="newTask-checkItemLabel" placeholder="Enter your item..." data-elementType="newTask-task">
-      <input type="checkbox" data-elementType="newTask-taskStatus">`;
-      notes.appendChild(newTask);
+      const taskInput = document.createElement("label");
+      taskInput.classList.add("subTaskInputContainer");
+      taskInput.innerHTML = `<input type="text" id="subTaskInput" maxlength="95"><button type="button" id="subTaskAddButton">Add Task</button>`;
+      taskInput.addEventListener("focusout", () => setTimeout(() => {
+        document.getElementById("subTaskInput").value = "";
+        taskInput.remove()
+      }, 150))
+      notesAdder.appendChild(taskInput);
+      document.getElementById("subTaskInput").focus();
+      document.getElementById("subTaskAddButton").addEventListener("click", (e) => e.preventDefault())
+      formController.postNote("subTaskInput");
     } else if (e.target.id == "addSubNotes") {
-      const newNote = document.createElement("div");
-      newNote.classList.add("newTask-noteContainer");
-      newNote.setAttribute("data-elementType", "newTask-subItem")
-      newNote.innerHTML = `<div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
-      <p class="newTask-note" data-elementType="newTask-note"></p> `
-      notes.appendChild(newNote);
+      const noteInput = document.createElement("label");
+      noteInput.classList.add("subNoteInputContainer");
+      noteInput.innerHTML = `<textarea id="subNoteInput" rows="4"></textarea> <button type="button" id="subNoteAddButton">Add Note</button>`;
+      noteInput.addEventListener("focusout", () => setTimeout(() => {
+        document.getElementById("subNoteInput").value = ""
+        noteInput.remove()
+      }, 150));
+      notes.appendChild(noteInput);
+      document.getElementById("subNoteInput").focus()
+      formController.postNote("subNoteInput");
     }
     return;
   },
+  postNote(id){
+    // Function that post a note or a task to the DOM.
+    const notes = document.getElementById("newTask-subItems");
+    const subItemInput = document.getElementById(id);
+    window.addEventListener("click", (e) => {
+      if (e.target.id == "subTaskAddButton" && subItemInput.value.trim() !== "") {
+        const newTask = document.createElement("div");
+        newTask.classList.add("newTask-checkItem");
+        newTask.setAttribute("data-elementType", "newTask-subItem");
+        newTask.innerHTML = `<div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
+          <label class="newTask-checkItemLabel" data-elementType="newTask-task">${subItemInput.value.trim()}</label>
+          <input type="checkbox" data-elementType="newTask-taskStatus">`;
+        notes.appendChild(newTask);
+      } else if (e.target.id == "subNoteAddButton" && subItemInput.value.trim() !== "") {
+        const newNote = document.createElement("div");
+        newNote.classList.add("newTask-noteContainer");
+        newNote.setAttribute("data-elementType", "newTask-subItem")
+        newNote.innerHTML = `<div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
+        <pre class="newTask-note" data-elementType="newTask-note">${subItemInput.value.trim()}</pre> `
+        notes.appendChild(newNote);
+      }
+    })
+  },
   removeSubItem(e) {
-    if (e.target.dataset.elementtype == "newTask-removeSubItem" && this.removableSubItemTest == true) {
+    // Function that allow users to delete sub-items with double click measures to prevent deleting by mistake
+    if (e.target.dataset.elementtype == "newTask-removeSubItem" && this.removableSubItemTest == true && this.removableSubItem == e.target.parentNode) {
       this.removableSubItem.remove();
       this.removableSubItemTest = false;
     } else if (
-      document.activeElement.parentNode.dataset.elementtype == "newTask-subItem"
+      e.target.parentNode.dataset.elementtype == "newTask-subItem"
     ) {
-      this.removableSubItem = document.activeElement.parentNode;
+      this.removableSubItem = e.target.parentNode;
       this.removableSubItemTest = true;
     } else {
       this.removableSubItemTest = false;
@@ -57,6 +93,7 @@ const formController = {
 };
 
 function addNewTaskFormAppear(e) {
+  // Function that add the new task form to the DOM
   if (e.target.id == "add-task") {
     let mask = document.createElement("div");
     mask.classList.add("blackMask");
@@ -86,19 +123,10 @@ function addNewTaskFormAppear(e) {
         <textarea name="newTask-description" class="newTask-description"></textarea>
         <label for="newTask-notes" class="newTask-notesLabel">Notes</label>
         <div class="newTask-notes" id="newTask-subItems">
-        <div class="subItemsAdder">
-          <div id="addSubTasks"></div>
-          <div id="addSubNotes"></div>
+        <div id="subItemsAdder">
+          <div title="Add Sub Task" id="addSubTasks"></div>
+          <div title="Add Sub Note" id="addSubNotes"></div>
         </div>
-          <div class="newTask-noteContainer" data-elementType="newTask-subItem">
-            <div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
-            <p class="newTask-note" data-elementType="newTask-note"></p> 
-          </div>
-          <div class="newTask-checkItem" data-elementType="newTask-subItem">
-            <div class="removeSubItem" data-elementType="newTask-removeSubItem"></div>
-            <input type="text" class="newTask-checkItemLabel" placeholder="Enter your item..." data-elementType="newTask-task">
-            <input type="checkbox" data-elementType="newTask-taskStatus">
-          </div>
         </div>
         <div class="newTask-infoBox2">
           <span id="newTask-etcContainer" class="newTask-etc">
@@ -109,7 +137,6 @@ function addNewTaskFormAppear(e) {
         <button class="newTask-addButton">Add Task</button>
       </form>
           `;
-
     document.body.appendChild(mask);
     document.getElementsByName("newTask-dueDate")[0].addEventListener("change", formController.calculateETC)
   }
@@ -127,5 +154,5 @@ window.addEventListener("click", resetMain);
 window.addEventListener("submit", resetMain);
 
 // Functions event listeners
-window.addEventListener("click", formController.addNewSubItem);
+window.addEventListener("click", formController.showNoteInput);
 window.addEventListener("click", formController.removeSubItem);

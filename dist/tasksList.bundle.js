@@ -6,6 +6,18 @@
   \*******************************/
 /***/ (() => {
 
+// Function to Capitalize words.
+Object.defineProperty(String.prototype, "capitalize", {
+  value: function () {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  },
+  enumerable: false,
+});
+
+////////////////////////////////////////
+//////////Tasks List Objects///////////
+//////////////////////////////////////
+
 // Information holder object that collects all information needed for new task
 const newTaskInfo = {
   newTaskName: "",
@@ -41,7 +53,7 @@ const newTaskInfo = {
   getDueDate() {
     const dueDateFiled = document.getElementsByClassName("newTask-dueDate");
     const dueDate = dueDateFiled[0].value;
-    this.newTaskDueDate = `Due: ${dueDate.split("T")[0]}`;
+    this.newTaskDueDate = dueDate;
   },
   getETC() {
     const etcFiled = document.getElementById("newTask-etcContainer");
@@ -70,11 +82,11 @@ const newTaskInfo = {
     const subTasksList = document.querySelectorAll(
       '[data-elementtype="newTask-task"]'
     );
-    notesList.forEach((note) =>
-      this.newTaskSubItems.push({ type: "note", value: note.innerText })
-    );
     subTasksList.forEach((task) =>
-      this.newTaskSubItems.push({ type: "task", value: task.value })
+      this.newTaskSubItems.push({ type: "task", value: task.innerText.trim() })
+    );
+    notesList.forEach((note) =>
+      this.newTaskSubItems.push({ type: "note", value: note.innerText.trim() })
     );
   },
   getPriority() {
@@ -172,7 +184,7 @@ const listItemController = {
     newListItem.homeItem = newTaskInfo.newTaskHomeItem;
     newListItem.subItems = newTaskInfo.newTaskSubItems;
     newListItem.priority = newTaskInfo.newTaskPriority;
-
+    newTaskInfo.newTaskSubItems = [];
     return newListItem;
   },
   populateList() {
@@ -187,21 +199,21 @@ const listItemController = {
       listItem.classList.add("task");
       listItem.setAttribute("data-taskId", item.idNo);
       listItem.innerHTML = `
-      <div class="taskRemovalContainer"></div>
-      <span class="task-group">
-        ${item.group}
-      </span>
-      <span class="task-name">${item.name}</span>
-      <input type="checkbox" name="task-completion-status" id="task-completion-status" />
-      <span class="task-brief">${item.description}</span>
-      <div class="task-toolBox">
-        <div class="stopWatch-button"></div>
-        <div class="pomo-button"></div>
-      </div>
-      <span class="task-dueDate">${item.dueDate}</span>
-      <span class="task-time">${item.workTime}</span>
-      <span class="task-ect">${item.ETC}</span>
-      `;
+        <div class="taskRemovalContainer"></div>
+        <span class="task-group">
+          ${item.group}
+        </span>
+        <span class="task-name">${item.name}</span>
+        <input type="checkbox" name="task-completion-status" id="task-completion-status" />
+        <span class="task-brief">${item.description}</span>
+        <div class="task-toolBox">
+          <div class="stopWatch-button"></div>
+          <div class="pomo-button"></div>
+        </div>
+        <span class="task-dueDate">Due: ${item.dueDate.split("T")[0]}</span>
+        <span class="task-time">${item.workTime}</span>
+        <span class="task-ect">${item.ETC}</span>
+        `;
       domTasksList.appendChild(listItem);
     });
   },
@@ -219,9 +231,11 @@ const listItemController = {
   },
   shiftDomList(e) {
     // Function that change the task list.
-    if (e.target.classList[0] != ("nav-item")) return;
+    if (e.target.classList[0] != "nav-item") return;
     const group = document.getElementsByClassName("nav-selected")[0].innerText;
-    const list = listItemController.itemsList.filter(item => listItemController.itemGroupsList(item).includes(group));
+    const list = listItemController.itemsList.filter((item) =>
+      listItemController.itemGroupsList(item).includes(group)
+    );
     document.getElementsByClassName("task-list")[0].innerHTML = "";
     listItemController.updateDomList(list);
   },
@@ -233,7 +247,9 @@ const listItemController = {
     const currentGroup =
       document.getElementsByClassName("nav-selected")[0].innerText;
     if (itemGroups.includes(currentGroup)) {
-      const list = [listItemController.itemsList[listItemController.itemsList.length - 1]];
+      const list = [
+        listItemController.itemsList[listItemController.itemsList.length - 1],
+      ];
       listItemController.updateDomList(list);
     }
   },
@@ -258,6 +274,78 @@ const listItemController = {
   },
 };
 
+////////////////////////////////////////
+//////////Tasks View Objects///////////
+//////////////////////////////////////
+
+// Controller that is responsible for taskView functionality
+const taskView = {
+  expand(e) {
+    if (e.target.classList[0] != "task-name") return;
+    const taskID = e.target.parentNode.dataset.taskid;
+    const item = listItemController.itemsList.filter(
+      (item) => item.idNo == taskID
+    )[0];
+    taskView.displayExpandedItem(item);
+  },
+  displayExpandedItem(item) {
+    const mask = document.createElement("div");
+    mask.classList.add("blackMask");
+    mask.innerHTML = `
+      <div class="taskView">
+       <div class="taskView-startDate">${item.startingDate}</div>
+       <div class="taskView-group">
+          <div id="taskEdit"></div>
+          ${item.group}
+       </div>
+       <div class="taskView-name">${item.name.capitalize()}</div>
+       <div class="taskView-dueDate">
+         Due: ${new Date(item.dueDate).toDateString()} ${new Date(
+      item.dueDate
+    ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+       </div>
+       <div class="taskView-priority">Priority: ${item.priority}</div>
+       <div class="taskView-etc">${item.ETC}</div>
+       <div class="taskView-totalTime">${item.workTime}</div>
+       <div class="taskView-description">
+         <span id="desName">Description:</span><span id="desText">${
+           item.description
+         }</span>
+       </div>
+       <div class="taskView-notes">
+         <span id="notesName">Notes:</span> 
+         </span>
+       </div>
+     </div>
+    `;
+    document.body.appendChild(mask);
+    taskView.makeSubItem(item.subItems);
+  },
+  makeSubItem(subItemsList) {
+    const listNode = document.getElementsByClassName("taskView-notes")[0];
+    const validationTest = /\w/;
+    subItemsList.forEach((subItem) => {
+      if (
+        subItem.type == "task" &&
+        validationTest.test(subItem.value) == true
+      ) {
+        const taskNode = document.createElement("label");
+        taskNode.innerHTML = `<span>${subItem.value}</span> <input type="checkbox" name="" id="">`;
+        listNode.appendChild(taskNode);
+      } else if (
+        subItem.type == "note" &&
+        validationTest.test(subItem.value) == true
+      ) {
+        const noteNode = document.createElement("span");
+        noteNode.classList.add("subNoteText");
+        noteNode.innerText = subItem.value;
+        listNode.appendChild(noteNode);
+      }
+    });
+  },
+};
+
+/////////Tasks List Eventlisteners
 window.addEventListener("click", newTaskInfo.getAllInfo);
 window.addEventListener("click", listItemController.removeItem);
 window.addEventListener("click", (e) => {
@@ -269,6 +357,9 @@ window.addEventListener("click", (e) => {
   }
 });
 window.addEventListener("click", listItemController.shiftDomList);
+
+/////////Tasks View Eventlisteners
+window.addEventListener("click", taskView.expand);
 
 
 /***/ })
