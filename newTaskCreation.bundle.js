@@ -28,7 +28,7 @@ const formController = {
     if (e.target.id == "addSubTasks") {
       const taskInput = document.createElement("label");
       taskInput.classList.add("subTaskInputContainer");
-      taskInput.innerHTML = `<input type="text" id="subTaskInput" maxlength="95"><button type="button" id="subTaskAddButton">Add Task</button>`;
+      taskInput.innerHTML = `<input type="text" id="subTaskInput" maxlength="80"><button type="button" id="subTaskAddButton">Add Task</button>`;
       taskInput.addEventListener("focusout", () => setTimeout(() => {
         document.getElementById("subTaskInput").value = "";
         taskInput.remove()
