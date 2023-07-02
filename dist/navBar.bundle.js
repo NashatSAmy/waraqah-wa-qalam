@@ -71,6 +71,7 @@ const navController = {
       deletedProjectName,
       navInfo.projectsNames
     );
+    localStorage.setItem("projectsNames", JSON.stringify(navInfo.projectsNames))
   },
 
   navNewItem(e) {
@@ -81,11 +82,26 @@ const navController = {
       navInfoEditing.addNewProjectName(navInfo.projectsNames, newProjectName);
       newProjectName.value = "";
       navCoordinator.navUpdate();
+      localStorage.setItem("projectsNames", JSON.stringify(navInfo.projectsNames))
       resetAllNav();
     } else {
       navDomManipulation.navNewItemError(newProjectName);
     }
   },
+
+  updateNavProjectsNamesListFromLS() {
+    if (!localStorage.getItem("projectsNames")) {
+      localStorage.setItem("projectsNames", JSON.stringify(navInfo.projectsNames))
+    };
+    const projectsList = document.querySelector(".costume-projects");
+    navInfo.projectsNames = JSON.parse(localStorage.getItem("projectsNames"));
+    navInfo.projectsNames.forEach((projectName) => {
+      let listItem = document.createElement("li");
+      listItem.classList.add("nav-item", "project");
+      listItem.innerText = projectName;
+      projectsList.appendChild(listItem);
+    });
+  }
 };
 
 // Animations!!!!!!!!!!!!!!!!!!!
@@ -145,7 +161,8 @@ document.querySelector("MAIN").addEventListener("click", resetAllNav);
 window.addEventListener("click", selectNavTabAnimation);
 window.addEventListener("click", addNewProjectAnimation);
 window.addEventListener("click", deleteProjectAnimation);
-navCoordinator.navUpdate()
+
+navController.updateNavProjectsNamesListFromLS()
 
 /***/ })
 

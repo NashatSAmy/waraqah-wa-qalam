@@ -83,10 +83,8 @@ const formController = {
   calculateETC() {
     const dueDate = new Date(document.getElementsByName("newTask-dueDate")[0].value).getTime()
     const startingDate = new Date().getTime();
-    const days = (dueDate - startingDate) / 8.64e+7;
-    const hours = (days - Math.floor(days)) * 24;
-    const minuets = (hours - Math.floor(hours)) * 60;
-    const etc = `ETC: Days ${Math.floor(days)} Hours ${Math.floor(hours)} Minutes ${Math.floor(minuets)}`;
+    const hours = (dueDate - startingDate) / 3.6e+6;
+    const etc = `ETC: Hours ${Math.round(hours)}`;
     const etcContainer = document.getElementById("newTask-etcContainer");
     etcContainer.innerText = etc;
   }
@@ -130,7 +128,7 @@ function addNewTaskFormAppear(e) {
         </div>
         <div class="newTask-infoBox2">
           <span id="newTask-etcContainer" class="newTask-etc">
-            ETC: Days 0 Hours 0 Minuets 0
+            ETC: Hours 0
           </span>
           <label class="newTask-addToHome">Add to HomePage<input type="checkbox" name="newTask-addToHome" checked></label>
         </div>
